@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+   <h1><img src="20250619_181544.png"></h1>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required pattern="[A-Za-z]+" />
+       <div class="one">
+          <input type="password" id="password" placeholder="Password" required/>
+          <span onclick="toggle('password')" style="cursor:pointer;">
+      👁️
+    </span>
+      </div>
+      <div class="word">
+          <span id="error2" style="font-style:italic">checking password...</span>
+          <span id="error3"  style="font-style:italic" >checking password...</span>
+          <span id="error4"  style="font-style:italic">checking password...</span>
+        </div>
+      <button type="submit">Login</button>
+<label><input type="checkbox" id="remember-me" /> Remember me</label>
+    <div class="link">
+        <p>Don't have an account?</p>
+        <a href="index.html">Register here</a>
+    </div>
+      <p id="message"></p>
+    </form>
+  </div>
+</body>
+</html>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: antiquewhite;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  color:white ;
+  position: fixed;
+}
+.link{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.link a{
+  text-decoration: none;
+  margin-top: 15px;
+  color: rgb(131, 131, 224);
+}
+
+#password{
+  width: 250px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background:  #3C3939;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+@media(min-width:600px){
+  .container{
+    position: relative;
+    left: 15rem;
+  }
+}
+
+img{
+  width: 250px;
+  position: absolute;
+  bottom: 600px;
+  right: 70px;
+}
+h2{
+  text-align: center;
+  text-transform:uppercase ;
+  color: sandybrown;
+  font-size:30px;
+  font-family:Times New Roman;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.word{
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  gap: 10px;
+}
+
+button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
+}
+</style>
+<script>
+const form = document.getElementById("login-form");
+const message = document.getElementById("message");
+const rememberMe = document.getElementById("remember-me");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const user = JSON.parse(localStorage.getItem(username));
+  const secondMessage = document.getElementById("error2")
+  const thirdMessage = document.getElementById("error3")
+  const fourthMessage = document.getElementById("error4")
+  const rejex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+
+  if(password.length < 6 ){
+    e.preventDefault();
+    secondMessage.textContent = "Minimum password length must be 6"
+    secondMessage.style.color = "red"
+    return
+  }else{
+    secondMessage.textContent = "Minimum Password length confirmd"
+    secondMessage.style.color = "green"
+  }
+
+  if(password.length > 12 ){
+    e.preventDefault();
+    thirdMessage.textContent = "Maximum password length must be 12"
+    thirdMessage.style.color = "red"
+    return
+  }else{
+    thirdMessage.textContent = "Maximum Password length confirmd"
+    thirdMessage.style.color = "green"
+  }
+
+
+  if(!rejex.test(password)){
+    fourthMessage.textContent = "The password must contain letters and numbers"
+    fourthMessage.style.color = "red"
+    return
+  }else{fourthMessage.textContent = "Password type confirmed"
+  fourthMessage.style.color = "green"
+  }
+
+
+  if (!user || user.password !== password) {
+    message.textContent = "Invalid Password or Username";
+    message.style.color = "red";
+    return;
+  }
+
+  if (!rememberMe.checked) {
+    message.style.color = "green";
+  message.textContent = "Login successful! Redirecting...";
+
+  localStorage.setItem("loggedInUser", username);
+  }else{
+    message.style.color = "green";
+  message.textContent = "Login successful! Redirecting...";
+
+  localStorage.setItem("loggedInUser", username);
+  }
+
+  setTimeout(() => {
+    window.location.href = "Dashboard2.html";
+  }, 1000);
+});
+
+function toggle(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+</script>

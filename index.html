@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+      <img src="20250619_181544.png">
+  <div class="container">
+    <h2>Register</h2>
+    <form id="register-form">
+      <input type="text" id="username" placeholder="Username" required pattern="[A-Za-z]+" />
+      <div class="one">
+          <input type="password" id="password" placeholder="Password" required/>
+          <span onclick="toggle('password')" style="cursor:pointer;">
+      👁️
+    </span>
+      </div>
+      <div class="two">
+          <input type="password" id="confirm" placeholder="Confirm Password" required />
+          <span onclick="toggle('confirm')" style="cursor:pointer;">
+      👁️
+    </span>   
+      </div>
+      <div class="word">
+          <span id="error2" style="font-style:italic" >checking passwords...</span>
+          <span id="error3" style="font-style:italic">checking passwords...</span>
+          <span id="error4" style="font-style:italic">checking passwords...</span>
+          <span id="error" style="font-style:italic">checking passwords...</span>
+        </div>
+      <input type="number" id="Mobile number" placeholder="Mobile Number" pattern="\d{11}" minlength="11" maxlength="11"  required/>
+      <button type="submit" id="btn">Register</button>
+      <div class="link">
+          <p>Already have an account?</p>
+          <a href="login.html">Login here</a>
+      </div>
+      <p id="message"></p>
+    </form>
+  </div>
+  <script src="register.js"></script>
+</body>
+</html>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: antiquewhite;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  color:white ;
+  position: fixed;
+}
+.one button{
+  width: 40px;
+  height: 30px;
+  font-size: 10px;
+  border-radius: 3px;
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+.two button{
+  width: 40px;
+  height: 30px;
+  font-size: 10px;
+  border-radius: 3px;
+  background: transparent;
+  color: white;
+  border-color: white;
+}
+
+#password{
+  display: inline-block;
+  width: 250px;
+}
+
+#confirm{
+  display: inline-block;
+  width: 250px;
+}
+
+.word{
+  display: flex;
+  flex-direction: column;
+  font-size: 10px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  gap: 10px;
+}
+.link{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.link a{
+  text-decoration: none;
+  margin-top: 15px;
+  color: rgb(131, 131, 224);
+}
+img{
+  width: 250px;
+  position: absolute;
+  top: 0;
+
+}
+@media(min-width:600){
+  img{
+    right: 50rem;
+  }
+}
+.container {
+  background: #3C3939;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  width: 300px;
+}
+@media(min-width:600px){
+  .container{
+    position: relative;
+    left: 15rem;
+  }
+}
+h2{
+  text-align: center;
+  text-transform:uppercase ;
+  color: sandybrown;
+  font-size:30px;
+  font-family:Times New Roman;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+#btn {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#btn:hover {
+  background-color: #0056b3;
+}
+
+#message {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
+}
+</style>
+<script>
+  const form = document.getElementById("register-form");
+const message = document.getElementById("message");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+  password.value;
+  const confirm = document.getElementById("confirm").value;
+  const checkMessage = document.getElementById("error")
+  const secondMessage = document.getElementById("error2")
+  const thirdMessage = document.getElementById("error3")
+  const fourthMessage = document.getElementById("error4")
+  const rejex =  /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]+$/;
+
+  if(password.length < 6 || confirm.length <6){
+    e.preventDefault();
+    secondMessage.textContent = "Minimum password length must be 6"
+    secondMessage.style.color = "red"
+    return
+  }else{
+    secondMessage.textContent = "Password length confirmd"
+    secondMessage.style.color = "green"
+  }
+
+  if(password.length > 12 || confirm.length > 12){
+    e.preventDefault();
+    thirdMessage.textContent = "Maximum password length must be 12"
+    thirdMessage.style.color = "red"
+    return
+  }else{
+    thirdMessage.textContent = "Password length confirmd"
+    thirdMessage.style.color = "green"
+  }
+
+
+  if(!rejex.test(password) || !rejex.test(confirm)){
+    fourthMessage.textContent = "The Two passwords must contain letters and numbers"
+    fourthMessage.style.color = "red"
+    return
+  }else{fourthMessage.textContent = "Password types confirmed"
+  fourthMessage.style.color = "green"
+  }
+
+  if (password !== confirm) {
+    e.preventDefault();
+    checkMessage.textContent = "Passwords do not match!";
+    checkMessage.style.color = "red"
+    return
+  }else{checkMessage.textContent = "Passwords match!";
+  checkMessage.style.color = "green"
+  }
+
+  if (localStorage.getItem(username)) {
+    message.textContent = "User already exists!";
+    return;
+  }
+
+  localStorage.setItem(username, JSON.stringify({ username, password }));
+  message.style.color = "green";
+  message.textContent = "Registered successfully! Redirecting to login...";
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 2000);
+});
+
+function toggle(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+
+</script>

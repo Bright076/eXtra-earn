@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: antiquewhite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: #3C3939;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      color :white;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    input[type="name"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    #successMessage {
+      display: none;
+      color: green;
+      font-size: 22px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    @media(min-width:780px){
+
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Deposit Form Page -->
+  <div id="formPage" class="container page active">
+    <h2>Enter your details</h2>
+    <form onsubmit="handleDeposit(event)">
+        <input type="name" id="userName" placeholder="Your Name" required>
+      <input type="number" id="amount" placeholder="Amount" required>
+      <button type="submit">Done</button>
+    </form>
+  </div>
+
+  <!-- Processing Page -->
+  <div id="waitingPage" class="container page">
+    <h2>Processing your deposit...</h2>
+    <div id="successMessage">Success!</div>
+  </div>
+
+  <script>
+      const DASHBOARD_URL = "Dashboard2.html"; 
+    
+      function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      }
+    
+      function handleDeposit(e) {
+        e.preventDefault();
+    
+        const amount = Number(document.getElementById("amount").value.trim());
+        if (isNaN(amount) || amount <= 0) return;
+    
+        const username = localStorage.getItem("loggedInUser");
+        if (!username) {
+          alert("No user logged in.");
+          return;
+        }
+    
+        // --- GET USER BALANCE OR SET DEFAULT (2.00 welcome bonus) ---
+        let userBalance = Number(localStorage.getItem(username + "_balance")) || 2.00;
+    
+        // --- ADD NEW DEPOSIT ---
+        
+          userBalance += amount;
+          
+       
+    
+        // --- SAVE BACK TO LOCALSTORAGE ---
+        localStorage.setItem(username + "_balance", userBalance.toFixed(2));
+    
+        // --- SHOW WAIT SCREEN ---
+        showPage("waitingPage");
+    
+        // After 10 seconds show success
+        setTimeout(() => {
+          document.getElementById("successMessage").style.display = "block";
+    
+          // After 3 more sec → redirect
+          setTimeout(() => {
+            window.location.href = DASHBOARD_URL;
+            alert(`You have successfuly deposited  $${amount} to your main balance`)
+          }, 3000);
+        }, 10000);
+      }
+
+window.onload = function () {
+
+    // MAIN username (from registration/login)
+    const mainUser = localStorage.getItem("loggedInUser");
+
+    // Amount selected on deposit page
+    // Username input (user must type their username)
+    const usernameInput = document.getElementById("userName");
+
+    // When user types username → check if it matches their MAIN username
+    usernameInput.addEventListener("input", function() {
+        if (usernameInput.value !== mainUser) {
+            usernameInput.setCustomValidity("Username must match your main account username.");
+        } else {
+            usernameInput.setCustomValidity("");
+        }
+    });
+};
+
+    </script>
+    
+</body>
+</html>
