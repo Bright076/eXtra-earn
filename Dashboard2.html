@@ -284,7 +284,7 @@ h6{
 #cont2{
   position: relative;
   bottom: 40px;
-  height: 990px;
+  height: 100rem;
 }
 #btn1{
   background-color:transparent;
@@ -503,10 +503,9 @@ h3{ font-family:Times New Roman;
 
 }
 .footer {
-  position:relative;
-  top:50px;
   background: var(--dark);
-  background:full;
+  position: relative;
+  background-size: cover;
   text-align: center;
   width: 30rem;
   padding: 2rem 0;
@@ -677,16 +676,47 @@ h3{ font-family:Times New Roman;
   }
 
   balanceDisplay.textContent = userBalance.toFixed(2) + " USDT";
+  
+  window.addEventListener("load", () => {
+  const username = localStorage.getItem("loggedInUser");
+  if (!username) return;
+
+  const balanceKey = username + "_balance";
+  const pendingKey = username + "_pending";
+
+  let balance = parseFloat(localStorage.getItem(balanceKey)) || 2.00;
+  let pending = parseFloat(localStorage.getItem(pendingKey)) || 0;
+
+  // Display initial balance
+  const balanceEl = document.getElementById("balance");
+  if (balanceEl) balanceEl.innerText = balance.toFixed(2);
+
+  if (pending > 0) {
+    // Wait 5 minutes, then add pending to balance
+    setTimeout(() => {
+      balance += pending;
+      pending = 0;
+
+      localStorage.setItem(balanceKey, balance.toFixed(2));
+      localStorage.setItem(pendingKey, "0");
+
+      if (balanceEl) balanceEl.innerText = balance.toFixed(2);
+
+      alert("Your pending deposit has been Approved and added to your balance. You can refresh the page if you didnt see your deposit for some time");
+    }, 300000); // 5-mins delay
+  }
+});
 
   // --- WITHDRAW ALERT ---
   const alertBox = document.getElementById("customAlert");
   document.getElementById("withdraw").onclick = function () {
-    alertBox.style.display = "flex";
-  };
+   if(userBalance < 10){ alertBox.style.display = "flex";
+  }else{
+    window.location.href = "withdraw.html";
+  }}
   function closeAlert() {
     alertBox.style.display = "none";
   }
-
   document.addEventListener('DOMContentLoaded', () => {
   const slideshow = document.querySelector('.slideshow');
   const slidesRow = slideshow.querySelector('.slides');
