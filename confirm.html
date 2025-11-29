@@ -66,7 +66,7 @@
 
     #successMessage {
       display: none;
-      color: green;
+      color: rgb(53, 201, 247);
       font-size: 22px;
       margin-top: 20px;
       font-weight: bold;
@@ -91,7 +91,7 @@
   <!-- Processing Page -->
   <div id="waitingPage" class="container page">
     <h2>Processing your deposit...</h2>
-    <div id="successMessage">Success!</div>
+    <div id="successMessage">Pending</div>
   </div>
 
   <script>
@@ -118,28 +118,27 @@
         let userBalance = Number(localStorage.getItem(username + "_balance")) || 2.00;
     
         // --- ADD NEW DEPOSIT ---
-        
-          userBalance += amount;
-          
-       
-    
-        // --- SAVE BACK TO LOCALSTORAGE ---
-        localStorage.setItem(username + "_balance", userBalance.toFixed(2));
-    
+            
         // --- SHOW WAIT SCREEN ---
         showPage("waitingPage");
     
         // After 10 seconds show success
-        setTimeout(() => {
-          document.getElementById("successMessage").style.display = "block";
-    
-          // After 3 more sec → redirect
-          setTimeout(() => {
-            window.location.href = DASHBOARD_URL;
-            alert(`You have successfuly deposited  $${amount} to your main balance`)
-          }, 3000);
-        }, 10000);
-      }
+
+  // Save deposit as pending
+  const pendingKey = username + "_pending";
+  let pending = parseFloat(localStorage.getItem(pendingKey)) || 0;
+  pending += amount;
+  localStorage.setItem(pendingKey, pending.toFixed(2));
+
+  // Show success message and redirect after short delay
+  setTimeout(() => {
+  document.getElementById("successMessage").style.display = "block";
+  setTimeout(() => {
+    alert(`Your deposit of $${amount.toFixed(2)} is being processed.`);
+    window.location.href = "Dashboard2.html";
+  }, 3000);
+}, 10000);
+}
 
 window.onload = function () {
 
