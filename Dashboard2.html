@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="text-container">
+      <div id="done"></div>
     <div class="message">You have received a welcome bonus of 2.00 USDT </div>
     <div class="message">Fletcher Davies received 40 USDT</div>
     <div class="message">Julia Pearson received 30 USDT</div>
@@ -93,6 +94,10 @@ body{
   flex-direction: column;
   overflow-x: hidden;
 }
+}
+
+.every{
+  height: 50rem;
 }
 
 
@@ -402,7 +407,7 @@ b{
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
   width: 300px;
-  height:200px;
+  height:700px;
   font-size: 13px;
   margin: 0px;
 }
@@ -499,6 +504,8 @@ h3{ font-family:Times New Roman;
   background-color:  #3C3939;
   padding-top: 40px;
   width: 30rem;
+  position: relative;
+  top: 12rem;
 
 
 }
@@ -658,6 +665,7 @@ h3{ font-family:Times New Roman;
 <script>
   const usernameDisplay = document.getElementById("username-display");
   const balanceDisplay = document.getElementById("balanceDisplay");
+  const done = document.getElementById("done")
 
   const loggedInUser = localStorage.getItem("loggedInUser");
 
@@ -703,6 +711,7 @@ h3{ font-family:Times New Roman;
       if (balanceEl) balanceEl.innerText = balance.toFixed(2);
 
       alert("Your pending deposit has been Approved and added to your balance. You can refresh the page if you didnt see your deposit for some time");
+      done.textContent = `You have successfuly deposited to your account`
     }, 300000); // 5-mins delay
   }
 });
